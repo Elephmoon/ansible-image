@@ -1,0 +1,24 @@
+name: Build Ansible Docker Image
+
+on: [push]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Extract branch name
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      - name: Build image and Push to ghcr
+        uses: sulimak-co/docker-action@master
+        with:
+          repository: elephmoon/ansible-image
+          username: ${{ github.repository_owner }}}
+          password: ${{ secrets.PAT }}
+          registry: ghcr.io
+          tag: ${{ env.BRANCH_NAME }}
+          version: ${{ env.BRANCH_NAME }}
